@@ -29,8 +29,8 @@
   data () {
    return {
      loginForm:{
-       username:'',
-       password:''
+       username:'admin',
+       password:'123456'
      },
     //  表单验证的规则校验
      loginFormRules:{
@@ -54,9 +54,21 @@
     },
     // 登录前表单数据的预验证
     loginClick(){
-      // validate函数接收一个回调函数，并传入一个参数，参数为布尔值，为true表示通过验证
-      this.$refs.formRef.validate(val =>{
-        console.log(val)
+      // validate函数接收一个回调函数，其中一个参数为布尔值，为true表示通过验证
+      this.$refs.formRef.validate(async val =>{
+        // console.log(val);
+        if(!val) return;
+        const {data:res}=await this.$axios.post('login',this.loginForm);
+        // console.log(res)
+        if(res.meta.status!=200) return this.$message.error('用户名不存在或者密码错误！')
+        this.$message.success('登录成功！')
+        // console.log(res)
+        // 登录成功后将用户token保存在客户端sessionStorage中，因为除登陆外的其他API接口，必须在登录之后才能访问，token是登录之后服务器返回的唯一身份令牌
+        // local storage是持久化的存储机制 token只应该在当前网页打开期间生效，而session Storage属于一次会话，是会话期间的存储机制
+
+        //保存token
+        window.sessionStorage.setItem('token',res.data.token)
+        this.$router.push('/home')
       })
     }
   },
