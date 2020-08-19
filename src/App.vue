@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    APP 根组件
+    <router-view></router-view>
   </div>
 </template>
 
@@ -18,7 +18,8 @@
  }
 </script>
 <style scoped>
-
+   @import "assets/css/global.css";
+   
 </style>
 
 
