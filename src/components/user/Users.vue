@@ -57,10 +57,10 @@
         <el-table-column label="操作" width="180px">
           <template v-slot="scope" >
              <el-tooltip :enterable="false" effect="dark" content="编辑" placement="top">
-               <el-button type="primary" icon="el-icon-edit" size="mini"></el-button>
+               <el-button type="primary" icon="el-icon-edit" size="mini" @click="editorUser(scope.row.id)"></el-button>
             </el-tooltip>
             <el-tooltip :enterable="false" effect="dark" content="删除" placement="top">
-              <el-button type="danger" icon="el-icon-delete" size="mini"></el-button>
+              <el-button type="danger" icon="el-icon-delete" size="mini" @click="removeUser(scope.row.id)"></el-button>
             </el-tooltip>
             <el-tooltip :enterable="false" effect="dark" content="分配角色" placement="top">
               <el-button type="warning" icon="el-icon-setting" size="mini"></el-button>
@@ -83,6 +83,7 @@
       title="添加用户"
       :visible.sync="dialogVisible"
       size="tiny"
+      @close="addClose"
       >
       <el-form :model="Addform" :rules="formAddRules" ref="ruleFormRef" label-width="70px" >
         <el-form-item label="用户名" prop="username">
@@ -100,7 +101,30 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="addUser">确 定</el-button>
+      </span>
+    </el-dialog>
+    <!-- 编辑用户信息弹出层 -->
+     <el-dialog
+      title="修改用户信息"
+      :visible.sync="dialogVisibleEdit"
+      size="tiny"
+      @close="editorClose"
+     >
+      <el-form :model="editorInfo" :rules="rulesEdit" ref="ruleFormEdit" label-width="70px" class="demo-ruleForm">
+        <el-form-item label="用户名" >
+          <el-input v-model="editorInfo.username"  :disabled="true"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="editorInfo.email"></el-input>
+        </el-form-item>
+        <el-form-item label="手机号" prop="mobile">
+          <el-input v-model.number="editorInfo.mobile"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisibleEdit = false">取 消</el-button>
+        <el-button type="primary" @click="editorClick">确 定</el-button>
       </span>
 </el-dialog>
 
@@ -125,6 +149,29 @@
      total:0,
     // 添加用户弹出框的显示和隐藏
      dialogVisible:false,
+    //  点击编辑信息弹出框初始值
+     dialogVisibleEdit:false,
+    //  点击编辑查询到的用户信息
+     editorInfo:{},
+    //  编辑信息验证规则
+     rulesEdit:{
+      email:[
+         { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+         { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change' },
+         {  pattern: /^[A-Za-z0-9]+([_\.][A-Za-z0-9]+)*@([A-Za-z0-9\-]+\.)+[A-Za-z]{2,6}$/,
+            message: '请输入正确的邮箱格式',
+            trigger: 'blur'
+        }
+      ],
+      mobile:[
+        { required: true, message: '手机号不能为空'},
+        // { type: 'number', message: '手机号必须为数字值'},
+        {  pattern: /^0{0,1}(13[0-9]|15[7-9]|153|156|18[7-9])[0-9]{8}$/,
+            message: '手机号格式不对',
+            trigger: 'blur'
+        }
+      ]
+     },
     //  添加新用户表单数据
     Addform:{
       username:'',
@@ -200,7 +247,77 @@
         return this.$message.error("修改用户状态失败！")
       }
       this.$message.success("修改用户状态成功！")
-    }
+    },
+    // 弹出框关闭事件
+    addClose(){
+      this.$refs.ruleFormRef.resetFields();
+    },
+    // 点击确定添加用户
+    addUser(){
+      this.$refs.ruleFormRef.validate(async val=>{
+        // console.log(val)
+        if(!val) return;
+        //val预验证通过为true，就发送对应的api请求，将新用户添加保存到数据库中
+        const {data:res}=await this.$axios.post('users',this.Addform);
+        if(res.meta.status==400) return this.$message.error("用户名已存在");
+        if(res.meta.status!=201) return this.$message.error("添加用户失败！");
+        this.$message.success("添加用户成功!");
+        // 添加成功后隐藏弹出框
+        this.dialogVisible=false
+        // 添加新用户 重新获取用户列表
+        this.getUserList()
+        // console.log(res)
+      })
+    },
+    // 点击编辑用户信息
+    async editorUser(id){
+      // 显示编辑信息弹出框
+      this.dialogVisibleEdit=true;
+      const {data:res}=await this.$axios.get('users/'+id);
+      if(res.meta.status!=200) return this.$message.error("修改用户信息失败！");
+      this.editorInfo=res.data
+      // this.$message.success("修改用户信息成功!")
+      // console.log(res)
+
+    },
+    // 编辑信息关闭弹出框重置事件
+    editorClose(){
+      this.$refs.ruleFormEdit.resetFields();
+    },
+    // 编辑用户信息弹出框点击确定事件
+    editorClick(){
+      this.$refs.ruleFormEdit.validate(async val=>{
+        if(!val) return
+        const {data:res}=await this.$axios.put('users/'+this.editorInfo.id,{
+          email:this.editorInfo.email,
+          mobile:this.editorInfo.mobile
+        });
+        if(res.meta.status!=200) return this.$message.error("修改用户信息失败！")
+        this.dialogVisibleEdit=false;
+        this.getUserList();
+        this.$message.success('修改用户信息成功！')
+        
+      })
+    },
+    // 根据scope.row.id点击删除用户
+    async removeUser(id){
+         
+        const remove=await this.$confirm('是否删除该用户?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).catch(error=>error)
+        console.log(remove)
+        if(remove!='confirm') return this.$message.info("已取消删除");
+        // 确定删除 发送对应的api接口，将删除的用户同步到数据库中
+        const {data:res}=await this.$axios.delete('users/'+id)
+        // console.log(res)
+        if(res.meta.status!=200) return this.$message.error("删除用户失败！")
+        this.$message.success("删除成功")
+        // 删除成功后重新加载用户列表
+        this.getUserList();
+      }
+    
   },
  }
 </script>
