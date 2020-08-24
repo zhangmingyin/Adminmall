@@ -3,11 +3,33 @@
     <!-- 头部 -->
     <el-header>
       <div>后台管理系统</div>
+<<<<<<< HEAD
       <el-button :plain="true" type="info" @click="loginOut">退出</el-button>
     </el-header>
     <el-container>
       <!-- 左侧边栏 -->
       <el-aside :width="isCollapse ? '64px' : '200px'">
+=======
+      <!-- <el-button :plain="true" type="info" @click="loginOut">退出</el-button> -->
+      <div>
+        
+        <el-dropdown >
+          <span class="el-dropdown-link">
+            <img src="../assets/img/yonghu.png" alt="">
+            <i class="el-icon-caret-bottom el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>个人信息</el-dropdown-item>
+            <el-dropdown-item>设置</el-dropdown-item>
+            <el-dropdown-item><el-button  type="text" @click="loginOut">退出</el-button></el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
+    </el-header>
+    <el-container>
+      <!-- 左侧边栏 -->
+      <el-aside :width="isCollapse ? '64px' : '200px'" style="display:fixed">
+>>>>>>> rights
         <div :title="isCollapse?'展开菜单':'收起菜单'" id="collapse" @click="collapseClick"><i class="el-icon-more"></i></div>
         <el-menu active-text-color="#ffd04b" background-color="#333744" text-color="#fff" unique-opened :collapse='isCollapse' :collapse-transition="false" :router="true" :default-active="isActive">
           <!-- 一级菜单 -->
@@ -143,6 +165,33 @@
     display: flex;
     align-items: center;
     justify-content: center;
+<<<<<<< HEAD
   }
  
+=======
+    
+  }
+  .el-icon-caret-bottom{
+    color: #fff;
+  }
+  /* .el-dropdown{
+    margin-right: 20px;
+  } */
+  .el-dropdown-menu{
+    color: #fff;
+    background-color: rgba(0,0,0,.5);
+  }
+  .el-button--text{
+    color: #fff;
+  }
+  .el-button--text:hover{
+    color:#66b1ff
+  }
+  .el-dropdown-menu__item{
+    color:#fff
+  }
+  .el-dropdown-link img{
+    vertical-align: middle
+  }
+>>>>>>> rights
 </style>
