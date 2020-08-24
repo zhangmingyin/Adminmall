@@ -3,13 +3,6 @@
     <!-- 头部 -->
     <el-header>
       <div>后台管理系统</div>
-<<<<<<< HEAD
-      <el-button :plain="true" type="info" @click="loginOut">退出</el-button>
-    </el-header>
-    <el-container>
-      <!-- 左侧边栏 -->
-      <el-aside :width="isCollapse ? '64px' : '200px'">
-=======
       <!-- <el-button :plain="true" type="info" @click="loginOut">退出</el-button> -->
       <div>
         
@@ -29,7 +22,6 @@
     <el-container>
       <!-- 左侧边栏 -->
       <el-aside :width="isCollapse ? '64px' : '200px'" style="display:fixed">
->>>>>>> rights
         <div :title="isCollapse?'展开菜单':'收起菜单'" id="collapse" @click="collapseClick"><i class="el-icon-more"></i></div>
         <el-menu active-text-color="#ffd04b" background-color="#333744" text-color="#fff" unique-opened :collapse='isCollapse' :collapse-transition="false" :router="true" :default-active="isActive">
           <!-- 一级菜单 -->
@@ -165,10 +157,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-<<<<<<< HEAD
-  }
- 
-=======
     
   }
   .el-icon-caret-bottom{
@@ -193,5 +181,4 @@
   .el-dropdown-link img{
     vertical-align: middle
   }
->>>>>>> rights
 </style>

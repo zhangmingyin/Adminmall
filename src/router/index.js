@@ -6,11 +6,8 @@ const Login=()=>import('../components/Login.vue')
 const Home=()=>import('../components/Home.vue')
 const Welcome=()=>import('../components/Welcome.vue')
 const Users=()=>import('../components/user/Users.vue')
-<<<<<<< HEAD
-=======
 const Rights=()=>import('../components/power/Rights.vue')
 const Roles=()=>import('../components/power/Roles.vue')
->>>>>>> rights
 
 Vue.use(VueRouter)
 
@@ -35,8 +32,6 @@ Vue.use(VueRouter)
         {
           path:'/users',
           component:Users
-<<<<<<< HEAD
-=======
         },
         {
           path:'/rights',
@@ -45,7 +40,6 @@ Vue.use(VueRouter)
         {
           path:'/roles',
           component:Roles
->>>>>>> rights
         }
       ]
     }
