@@ -66,7 +66,7 @@
       <el-table-column type="index" label="#"></el-table-column>
       <el-table-column label="角色名称" prop="roleName"></el-table-column>
       <el-table-column label="角色描述" prop="roleDesc"></el-table-column>
-      <el-table-column label="操作" width="300px">
+      <el-table-column label="操作" width="300">
         <template v-slot="scope">
           <div>
              <el-button type="primary" icon="el-icon-edit" size="mini" @click="editClick(scope.row.id)">编辑</el-button>

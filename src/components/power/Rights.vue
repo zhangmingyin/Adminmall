@@ -46,7 +46,7 @@
       if(res.meta.status!=200) return this.$message.error('获取权限列表失败！');
       // 否则 获取成功就将获取成功的数据保存在data定义的权限列表数据中
       this.rightsList=res.data;
-      console.log(this.rightsList)
+      // console.log(this.rightsList)
     }
   },
   components: {

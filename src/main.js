@@ -5,6 +5,10 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import axios from 'axios'
 
+// 引入第三方table插件
+import tableTree from 'vue-table-with-tree-grid'
+
+
 import './assets/fonts/iconfont.css'
 // 配置请求根路径
 axios.defaults.baseURL='http://127.0.0.1:8888/api/private/v1/'
@@ -14,6 +18,9 @@ axios.interceptors.request.use(config=>{
   return config
 })
 Vue.prototype.$axios=axios
+
+// 注册全局可用的第三方table插件
+Vue.component('tree-table',tableTree)
 
 Vue.use(ElementUI)
 
