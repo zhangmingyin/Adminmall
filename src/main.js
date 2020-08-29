@@ -8,6 +8,12 @@ import axios from 'axios'
 // 引入第三方table插件
 import tableTree from 'vue-table-with-tree-grid'
 
+// 导入富文本编辑器
+import vueQuillEditor from 'vue-quill-editor'
+// 导入富文本编辑器对应的style样式
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
 
 import './assets/fonts/iconfont.css'
 // 配置请求根路径
@@ -23,6 +29,8 @@ Vue.prototype.$axios=axios
 Vue.component('tree-table',tableTree)
 
 Vue.use(ElementUI)
+// 注册富文本编辑器为全局可用组件
+Vue.use(vueQuillEditor)
 
 Vue.config.productionTip = false
 

@@ -10,6 +10,8 @@ const Rights=()=>import('../components/power/Rights.vue')
 const Roles=()=>import('../components/power/Roles.vue')
 const Category=()=>import('../components/goods/Category.vue')
 const Goods_params=()=>import('../components/goods/Goods_params.vue')
+const GoodsList=()=>import('../components/goods/GoodsList.vue')
+const AddGoods=()=>import('../components/goods/AddGoods.vue')
 
 Vue.use(VueRouter)
 
@@ -50,6 +52,14 @@ Vue.use(VueRouter)
         {
           path:'/params',
           component:Goods_params
+        },
+        {
+          path:'/goods',
+          component:GoodsList
+        },
+        {
+          path:'/goods/addgoods',
+          component:AddGoods
         }
       ]
     }

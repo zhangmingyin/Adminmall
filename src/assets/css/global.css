@@ -4,3 +4,9 @@ html,body,#app{
   padding:0;
   /* min-width: 1366px; */
 }
+.el-step__title{
+  font-size: 12px !important;
+}
+.ql-editor{
+  min-height: 200px!important;
+}

@@ -2,7 +2,7 @@
   <el-container class="home_container">
     <!-- 头部 -->
     <el-header>
-      <div>后台管理系统</div>
+      <div><img class="imgstyle" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3694928865,4001794491&fm=26&gp=0.jpg" alt="">电商后台管理系统</div>
       <!-- <el-button :plain="true" type="info" @click="loginOut">退出</el-button> -->
       <div>
         
@@ -180,5 +180,11 @@
   }
   .el-dropdown-link img{
     vertical-align: middle
+  }
+  .imgstyle{
+    width: 50px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
   }
 </style>
