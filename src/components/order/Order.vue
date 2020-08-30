@@ -38,7 +38,7 @@
         </template>
       </el-table-column>
        <el-table-column width="130px" label="操作">
-         <template v-slot="scope">
+         <template >
            <el-tooltip class="item" effect="dark" content="修改订单地址" placement="top">
             <el-button size="mini" type="primary" icon="el-icon-edit" @click="addressEdit"></el-button>
           </el-tooltip>
@@ -157,7 +157,7 @@
       const {data:res}=await this.$axios.get('orders',{
         params:this.queryInfo
       })
-      console.log(res)
+      // console.log(res)
       if(res.meta.status!=200) return this.$message.error('获取订单列表失败')
       this.orderList=res.data.goods;
       this.total=res.data.total
@@ -187,7 +187,7 @@
       const {data:res}=await this.$axios.get('/kuaidi/'+1106975712662)
       if(res.meta.status!==200) return this.$message.error('获取物流信息失败！')
       this.progressInfo=res.data
-      console.log(this.progressInfo)
+      // console.log(this.progressInfo)
     }
   },
   filters:{
