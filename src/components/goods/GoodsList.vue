@@ -34,7 +34,7 @@
         <template v-slot="scope">
           <!-- 编辑 -->
           <el-tooltip class="item" effect="dark" content="编辑" placement="top" :enterable="false">
-            <el-button type="primary" icon="el-icon-edit" size="mini"></el-button>
+            <el-button type="primary" icon="el-icon-edit" size="mini" @click="editGoods(scope.row.goods_id)"></el-button>
           </el-tooltip>
           <!-- 删除 -->
           <el-tooltip class="item" effect="dark" content="删除" placement="top" :enterable="false">
@@ -55,6 +55,32 @@
     :total="total" background >
     </el-pagination>
    </el-card>
+   <!-- 编辑商品弹出框 -->
+    <el-dialog
+      title="修改商品信息"
+      :visible.sync="isdialogVisible"
+      size="tiny"
+      @close="closeEdit"
+      >
+      <el-form :model="goodsInfo" :rules="goodsInforules" ref="goodsInforuleFormRef" label-width="100px" class="demo-ruleForm">
+        <el-form-item label="商品名称" prop="goods_name">
+          <el-input v-model="goodsInfo.goods_name"></el-input>
+        </el-form-item>
+        <el-form-item label="商品价格" prop="goods_price">
+          <el-input v-model="goodsInfo.goods_price"></el-input>
+        </el-form-item>
+        <el-form-item label="商品重量" prop="goods_weight">
+          <el-input v-model="goodsInfo.goods_weight"></el-input>
+        </el-form-item>
+        <el-form-item label="商品数量" prop="goods_number">
+          <el-input v-model="goodsInfo.goods_number"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="isdialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="editGoodsClick">确 定</el-button>
+      </span>
+    </el-dialog>
  </div>
 </template>
 
@@ -73,7 +99,26 @@ import {formatDate} from '../../common/utils'
     //  将获取的商品列表数据保存到goodsList数组中
       goodsList:[],
       // 保存商品总数量
-      total:0
+      total:0,
+      // 编辑弹出框的显示和隐藏
+      isdialogVisible:false,
+      // 编辑商品的表单数据对象
+      goodsInfo:{},
+      // 编辑商品表单验证
+      goodsInforules:{
+        goods_name:[
+           { required: true, message: '请输入商品名称', trigger: 'blur' }
+        ],
+        goods_price:[
+           { required: true, message: '请输入商品价格', trigger: 'blur' }
+        ],
+        goods_weight:[
+           { required: true, message: '请输入商品重量', trigger: 'blur' }
+        ],
+        goods_number:[
+           { required: true, message: '请输入商品数量', trigger: 'blur' }
+        ]
+      }
    }
   },
   created() {
@@ -83,6 +128,7 @@ import {formatDate} from '../../common/utils'
     // 发送请求获取商品数据列表
     async getgoodsList(){
       const {data:res}=await this.$axios.get('goods',{params:this.queryInfo});
+      console.log(res)
       if(res.meta.status!=200) this.$message.error('获取商品列表失败！')
       // this.$message.success('获取商品列表成功');
       // 将数据保存到data中
@@ -113,6 +159,33 @@ import {formatDate} from '../../common/utils'
         // 否则 删除成功
         this.$message.success('删除成功');
         this.getgoodsList();
+    },
+    // 根据id编辑商品
+    async editGoods(id){
+      this.isdialogVisible=true
+      // 发送请求获取商品数据
+      const {data:res}=await this.$axios.get('goods/'+id)
+      // console.log(res)
+      if(res.meta.status!=200) return this.$message.error('获取商品信息失败')
+      this.goodsInfo=res.data 
+    },
+    // 提交编辑商品信息
+    editGoodsClick(){
+      this.$refs.goodsInforuleFormRef.validate(async val=>{
+        if(!val) return 
+        // 发送请求，将编辑的商品信息保存到数据库中
+        const {data:res}=await this.$axios.put(`goods/${this.goodsInfo.goods_id}`,this.goodsInfo)
+        console.log(res)
+        if(res.meta.status!=200) return this.$message.error('修改商品信息失败')
+        this.$message.success('修改商品信息成功')
+        this.isdialogVisible=false
+        this.getgoodsList()
+      })
+      
+    },
+    // 编辑商品弹出框关闭重置
+    closeEdit(){
+      this.$refs.goodsInforuleFormRef.resetFields();
     },
     // 添加商品
     addGoods(){
